@@ -20,7 +20,7 @@ public final class Client {
         try {
             // LocateRegistry.getRegistry(&quot;localhost&quot;,1999);
             // System.out.println(&quot;Found registry...&quot;);
-<span class="nc" id="L23">            MuleServer s = (MuleServer) Naming.lookup(&quot;rmi://localhost:1999/HagimuleServer&quot;);</span>
+<span class="nc" id="L23">            MuleServer s = (MuleServer) Naming.lookup(&quot;rmi://172.22.225.120:1999/HagimuleServer&quot;);</span>
 <span class="nc" id="L24">            System.out.println(&quot;Found server...&quot;);</span>
 <span class="nc" id="L25">            System.out.println(s.ping()); // 0</span>
 <span class="nc" id="L26">        } catch (Exception e) {</span>

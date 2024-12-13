@@ -14,6 +14,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
         return 0;
     }
 
+    @Override
     public String ping() throws RemoteException {
         System.out.println("Ping called !");
         return "Server online.";

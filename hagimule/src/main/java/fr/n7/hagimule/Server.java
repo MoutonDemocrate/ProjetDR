@@ -1,5 +1,6 @@
 package fr.n7.hagimule;
 
+import java.net.InetAddress;
 import java.rmi.*;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
@@ -14,6 +15,7 @@ public final class Server {
 
     /**
      * Says hello to the world.
+     * 
      * @param args The arguments of the program.
      */
     public static void main(String[] args) {
@@ -21,7 +23,9 @@ public final class Server {
         try {
             Registry registry = LocateRegistry.createRegistry(1999);
             ServerImpl server = new ServerImpl();
-            Naming.rebind("rmi://localhost:1999/HagimuleServer", (Remote) server);
+            String host_adress = InetAddress.getLocalHost().getHostAddress();
+            System.out.println("Server is hosted at : " + host_adress + ":1999");
+            Naming.rebind("rmi://" + host_adress + ":1999/HagimuleServer", (Remote) server);
         } catch (Exception e) {
             e.printStackTrace();
         }

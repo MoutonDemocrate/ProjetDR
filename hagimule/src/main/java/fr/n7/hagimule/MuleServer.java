@@ -3,8 +3,9 @@ import java.rmi.*;
 
 public interface MuleServer extends Remote {
 
-    public boolean ping() throws RemoteException;
+    public String ping() throws RemoteException;
 
+    
     public int maMethode() throws RemoteException;
     
 }
