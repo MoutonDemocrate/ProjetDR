@@ -14,9 +14,10 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 <span class="nc" id="L14">        return 0;</span>
     }
 
+    @Override
     public String ping() throws RemoteException {
-<span class="nc" id="L18">        System.out.println(&quot;Ping called !&quot;);</span>
-<span class="nc" id="L19">        return &quot;Server online.&quot;;</span>
+<span class="nc" id="L19">        System.out.println(&quot;Ping called !&quot;);</span>
+<span class="nc" id="L20">        return &quot;Server online.&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
