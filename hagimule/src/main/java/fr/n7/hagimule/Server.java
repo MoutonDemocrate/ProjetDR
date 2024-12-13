@@ -1,5 +1,6 @@
 package fr.n7.hagimule;
 
+import org.json.*;
 import java.net.InetAddress;
 import java.rmi.*;
 import java.rmi.Naming;
