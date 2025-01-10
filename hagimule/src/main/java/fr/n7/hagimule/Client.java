@@ -22,7 +22,9 @@ public final class Client {
             // System.out.println("Found registry...");
             MuleServer s = (MuleServer) Naming.lookup("rmi://172.22.225.120:1999/HagimuleServer");
             System.out.println("Found server...");
-            System.out.println(s.ping()); // 0
+            System.out.println("Pinging server...");
+            String response = s.ping("Yo !") ;
+            System.out.println("[SERVER] "+response);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="fr.n7.hagimule.AppTest" time="0.245" tests="1" errors="0" skipped="0" failures="0">
 =======
 <testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="fr.n7.hagimule.AppTest" time="0.115" tests="1" errors="0" skipped="0" failures="0">
 >>>>>>> origin/main
+=======
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="fr.n7.hagimule.AppTest" time="0.037" tests="1" errors="0" skipped="0" failures="0">
+>>>>>>> Stashed changes
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -18,6 +22,7 @@
     <property name="os.name" value="Linux"/>
     <property name="java.vm.specification.version" value="23"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk/lib"/>
@@ -30,6 +35,11 @@
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/Jean-Pierre/Documents/Etain/N7/S7/Intergiciel/ProjetDR/hagimule/target/test-classes:/home/Jean-Pierre/Documents/Etain/N7/S7/Intergiciel/ProjetDR/hagimule/target/classes:/home/Jean-Pierre/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0.jar:/home/Jean-Pierre/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/Jean-Pierre/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/Jean-Pierre/.m2/repository/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0.jar:/home/Jean-Pierre/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0.jar:/home/Jean-Pierre/.m2/repository/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0.jar:"/>
 >>>>>>> origin/main
+=======
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-8-openjdk/jre/lib/amd64"/>
+    <property name="sun.java.command" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter9108164982356257900.jar /home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire 2024-12-12T17-34-45_955-jvmRun1 surefire2785972409213063333tmp surefire_08557475162225151892tmp"/>
+    <property name="surefire.test.class.path" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/test-classes:/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/classes:/home/lae/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0.jar:/home/lae/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/lae/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/lae/.m2/repository/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0.jar:/home/lae/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0.jar:/home/lae/.m2/repository/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0.jar:"/>
+>>>>>>> Stashed changes
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="/home/Jean-Pierre"/>
     <property name="user.language" value="en"/>
@@ -44,10 +54,15 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
 <<<<<<< HEAD
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+<<<<<<< Updated upstream
     <property name="surefire.real.class.path" value="/home/lae/Documents/Work/CompSci/2A/ProjetDR/hagimule/target/surefire/surefirebooter1173926431915291973.jar"/>
 =======
     <property name="surefire.real.class.path" value="/home/Jean-Pierre/Documents/Etain/N7/S7/Intergiciel/ProjetDR/hagimule/target/surefire/surefirebooter15451905433817018821.jar"/>
 >>>>>>> origin/main
+=======
+    <property name="surefire.real.class.path" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter9108164982356257900.jar:/home/lae/.m2/repository/org/jacoco/org.jacoco.agent/0.8.4/org.jacoco.agent-0.8.4-runtime.jar"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-8-openjdk/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk/jre/classes"/>
+>>>>>>> Stashed changes
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23"/>
     <property name="user.name" value="Jean-Pierre"/>
@@ -73,9 +88,13 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
+<<<<<<< Updated upstream
 <<<<<<< HEAD
   <testcase name="testApp" classname="fr.n7.hagimule.AppTest" time="0.143"/>
 =======
   <testcase name="testApp" classname="fr.n7.hagimule.AppTest" time="0.076"/>
 >>>>>>> origin/main
+=======
+  <testcase name="testApp" classname="fr.n7.hagimule.AppTest" time="0.027"/>
+>>>>>>> Stashed changes
 </testsuite>
