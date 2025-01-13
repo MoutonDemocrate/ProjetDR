@@ -20,7 +20,7 @@ public final class Client {
         try {
             // LocateRegistry.getRegistry("localhost",1999);
             // System.out.println("Found registry...");
-            MuleServer s = (MuleServer) Naming.lookup("rmi://172.22.225.120:1999/HagimuleServer");
+            MuleServer s = (MuleServer) Naming.lookup("rmi://192.168.43.241:1999/HagimuleServer");
             System.out.println("Found server...");
             System.out.println("Pinging server...");
             String response = s.ping() ;
