@@ -23,7 +23,7 @@ public final class Client {
             MuleServer s = (MuleServer) Naming.lookup("rmi://172.22.225.120:1999/HagimuleServer");
             System.out.println("Found server...");
             System.out.println("Pinging server...");
-            String response = s.ping("Yo !") ;
+            String response = s.ping() ;
             System.out.println("[SERVER] "+response);
         } catch (Exception e) {
             e.printStackTrace();
