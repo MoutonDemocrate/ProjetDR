@@ -1,7 +1,6 @@
 # <p style="text-align: center;"> HagiMule </p>
 __<p style="text-align: center;"> Projets données réparties </p>__
-//
-//
+
 <p style="text-align: right;"> Bontinck Laérian </p>
 <p style="text-align: right;"> Demazure Clément </p>
 
