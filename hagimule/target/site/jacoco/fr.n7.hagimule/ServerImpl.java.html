@@ -24,7 +24,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 <span class="nc" id="L24">        } catch (SQLException e) {</span>
 <span class="nc" id="L25">            System.out.println(e.getMessage());</span>
 <span class="nc" id="L26">            System.exit(1);</span>
-<span class="nc" id="L27">        }</span>
+        }
 
         
 
@@ -41,14 +41,14 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 <span class="nc" id="L41">            System.err.println(&quot;--- SQL ERROR ---&quot;);</span>
 <span class="nc" id="L42">            e.printStackTrace();</span>
 <span class="nc" id="L43">            System.err.println(&quot;---           ---&quot;);</span>
-<span class="nc" id="L44">        }</span>
+        }
 
 <span class="nc" id="L46">        System.out.println(&quot;Server instance created...&quot;);</span>
 
 <span class="nc" id="L48">        Timer t = new Timer();</span>
 <span class="nc" id="L49">        t.scheduleAtFixedRate(</span>
-            new TimerTask()
-<span class="nc" id="L51">            {</span>
+<span class="nc" id="L50">            new TimerTask()</span>
+            {
                 public void run()
                 {
 <span class="nc" id="L54">                    System.out.println(&quot;Checking for dead clients...&quot;);</span>
@@ -60,8 +60,8 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
                     }
 <span class="nc" id="L61">                }</span>
             },
-            0,      // run first occurrence immediately
-            20000);  // run every twenty seconds
+<span class="nc" id="L63">            0,      // run first occurrence immediately</span>
+<span class="nc" id="L64">            20000);  // run every twenty seconds</span>
 
 <span class="nc" id="L66">    }</span>
 
@@ -71,7 +71,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
         String Adress;
         Boolean Dead;
         Long LastTimeSeen;
-        public ClientState(String adress,
+<span class="nc" id="L74">        public ClientState(String adress,</span>
 <span class="nc" id="L75">            Boolean dead) {</span>
 <span class="nc" id="L76">                this.Adress = adress;</span>
 <span class="nc" id="L77">                this.Dead = dead;</span>
@@ -123,7 +123,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 <span class="nc bnc" id="L123" title="All 2 branches missed.">            while (rs.next()) {</span>
 <span class="nc" id="L124">                FileInfo fileInfo = new FileInfo(rs.getString(&quot;name&quot;), rs.getInt(&quot;size&quot;), rs.getString(&quot;hosters&quot;));</span>
 <span class="nc" id="L125">                files.add(fileInfo);</span>
-<span class="nc" id="L126">            }</span>
+            }
 <span class="nc" id="L127">            System.out.println(&quot;Returning : &quot; + files.toString());</span>
 <span class="nc" id="L128">            return files;</span>
 <span class="nc" id="L129">        } catch (SQLException e) {</span>
@@ -139,75 +139,82 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
     }
 
     private void insertNew(String name, int size, String client_adress) throws SQLException {
-<span class="nc" id="L142">        Statement st = sqlConnection.createStatement();</span>
-<span class="nc" id="L143">        st.executeQuery(&quot;insert into files values (&quot; + name + &quot;,&quot; + String.valueOf(size) + &quot;,&quot; + client_adress + &quot;)&quot;);</span>
-<span class="nc" id="L144">    }</span>
+<span class="nc" id="L142">        PreparedStatement st = sqlConnection.prepareStatement(&quot;INSERT INTO files(name, size, hosters) VALUES (?, ?, ?)&quot;);</span>
+<span class="nc" id="L143">        st.setString(1, name);</span>
+<span class="nc" id="L144">        st.setInt(2, size);</span>
+<span class="nc" id="L145">        st.setString(3, client_adress);</span>
+<span class="nc" id="L146">        st.executeUpdate();</span>
+<span class="nc" id="L147">    }</span>
 
     @Override
     public String ping() throws RemoteException {
-<span class="nc" id="L148">        System.out.println(&quot;Ping called !&quot;);</span>
-<span class="nc" id="L149">        return &quot;Server online.&quot;;</span>
+<span class="nc" id="L151">        System.out.println(&quot;Ping called !&quot;);</span>
+<span class="nc" id="L152">        return &quot;Server online.&quot;;</span>
     }
 
     @Override
     public String addFileToDirectory(String filename, int size, String client_adress) throws RemoteException {
-<span class="nc" id="L154">        System.out.println(&quot;addFileToDirectory() called {&quot;+filename+&quot;, &quot;+String.valueOf(size)+&quot;, &quot;+client_adress+&quot;}&quot;);</span>
+<span class="nc" id="L157">        System.out.println(&quot;addFileToDirectory() called {&quot;+filename+&quot;, &quot;+String.valueOf(size)+&quot;, &quot;+client_adress+&quot;}&quot;);</span>
         try {
-<span class="nc" id="L156">            String q = String.format(&quot;SELECT DISTINCT files FROM files WHERE name='%s';&quot;,filename);</span>
-<span class="nc" id="L157">            ResultSet rs = query(q);</span>
+<span class="nc" id="L159">            String q = String.format(&quot;SELECT DISTINCT name FROM files WHERE name='%s';&quot;,filename);</span>
+<span class="nc" id="L160">            ResultSet rs = query(q);</span>
             // If file is in database
-<span class="nc bnc" id="L159" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L160">                String hosters = rs.getString(&quot;hosters&quot;);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L163">                String hosters = rs.getString(&quot;hosters&quot;);</span>
                 // If client is not already a hoster
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                if (!Arrays.stream(hosters.split(&quot;;&quot;)).anyMatch(&quot;client_adress&quot;::equals)) {</span>
-<span class="nc" id="L163">                    hosters += &quot;;&quot; + client_adress ;</span>
-<span class="nc" id="L164">                    PreparedStatement st = sqlConnection.prepareStatement(&quot;UPDATE item SET hosters = ?, WHERE name = ?&quot;);</span>
-<span class="nc" id="L165">                    st.setString(1, hosters);</span>
-<span class="nc" id="L166">                    st.setString(2, filename);</span>
-<span class="nc" id="L167">                    st.executeUpdate();</span>
-<span class="nc" id="L168">                    return &quot;Client succesfully added as hoster.&quot;;</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                if (!Arrays.stream(hosters.split(&quot;;&quot;)).anyMatch(&quot;client_adress&quot;::equals)) {</span>
+<span class="nc" id="L166">                    hosters += &quot;;&quot; + client_adress ;</span>
+<span class="nc" id="L167">                    PreparedStatement st = sqlConnection.prepareStatement(&quot;UPDATE item SET hosters = ?, WHERE name = ?&quot;);</span>
+<span class="nc" id="L168">                    st.setString(1, hosters);</span>
+<span class="nc" id="L169">                    st.setString(2, filename);</span>
+<span class="nc" id="L170">                    st.executeUpdate();</span>
+<span class="nc" id="L171">                    System.out.println(&quot;Client succesfully added as hoster.&quot;);</span>
+<span class="nc" id="L172">                    return &quot;Client succesfully added as hoster.&quot;;</span>
                 } else {
                     // Client is already a hoster.
-<span class="nc" id="L171">                    return &quot;Client is already a hoster.&quot;;</span>
+<span class="nc" id="L175">                    System.out.println(&quot;Client is already a hoster.&quot;);</span>
+<span class="nc" id="L176">                    return &quot;Client is already a hoster.&quot;;</span>
                 }
             }
             // If file is not in the database
-<span class="nc" id="L175">            insertNew(filename, size, client_adress);</span>
-<span class="nc" id="L176">            return &quot;File added in database, with client as hoster.&quot;;</span>
-<span class="nc" id="L177">        } catch (SQLException e) {</span>
-<span class="nc" id="L178">            return &quot;There was an error with the database.&quot;;</span>
+<span class="nc" id="L180">            insertNew(filename, size, client_adress);</span>
+<span class="nc" id="L181">            System.out.println(&quot;File added in database, with client as hoster.&quot;);</span>
+<span class="nc" id="L182">            return &quot;File added in database, with client as hoster.&quot;;</span>
+<span class="nc" id="L183">        } catch (SQLException e) {</span>
+<span class="nc" id="L184">            e.printStackTrace();</span>
+<span class="nc" id="L185">            return &quot;There was an error with the database.&quot;;</span>
         }
     }
 
     @Override
     public String[] getClientsForFile(String filename) throws RemoteException {
-<span class="nc" id="L184">        System.out.println(&quot;Client requested : &quot; + filename);</span>
-<span class="nc" id="L185">        String hosters = &quot;&quot;;</span>
+<span class="nc" id="L191">        System.out.println(&quot;Client requested : &quot; + filename);</span>
+<span class="nc" id="L192">        String hosters = &quot;&quot;;</span>
         try {
-<span class="nc" id="L187">            String q = String.format(&quot;SELECT DISTINCT hosters FROM files WHERE name='%s';&quot;,filename);</span>
-<span class="nc" id="L188">            ResultSet rs = query(q);</span>
-<span class="nc bnc" id="L189" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L190">                hosters = rs.getString(&quot;hosters&quot;);</span>
-<span class="nc" id="L191">                return hosters.split(&quot;;&quot;);</span>
+<span class="nc" id="L194">            String q = String.format(&quot;SELECT DISTINCT hosters FROM files WHERE name='%s';&quot;,filename);</span>
+<span class="nc" id="L195">            ResultSet rs = query(q);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L197">                hosters = rs.getString(&quot;hosters&quot;);</span>
+<span class="nc" id="L198">                return hosters.split(&quot;;&quot;);</span>
             }
-<span class="nc" id="L193">            return new String[]{};</span>
-<span class="nc" id="L194">        } catch (SQLException e) {</span>
-<span class="nc" id="L195">            return new String[]{};</span>
+<span class="nc" id="L200">            return new String[]{};</span>
+<span class="nc" id="L201">        } catch (SQLException e) {</span>
+<span class="nc" id="L202">            return new String[]{};</span>
         }
     }
 
     @Override
     public int getSizeForFile(String filename) throws RemoteException {
-<span class="nc" id="L201">        System.out.println(&quot;Client requested size of : &quot; + filename);</span>
+<span class="nc" id="L208">        System.out.println(&quot;Client requested size of : &quot; + filename);</span>
         try {
-<span class="nc" id="L203">            String q = String.format(&quot;SELECT size FROM files WHERE name='%s';&quot;,filename);</span>
-<span class="nc" id="L204">            ResultSet rs = query(q);</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L206">                return rs.getInt(&quot;size&quot;);</span>
+<span class="nc" id="L210">            String q = String.format(&quot;SELECT size FROM files WHERE name='%s';&quot;,filename);</span>
+<span class="nc" id="L211">            ResultSet rs = query(q);</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L213">                return rs.getInt(&quot;size&quot;);</span>
             }
-<span class="nc" id="L208">            return -1;</span>
-<span class="nc" id="L209">        } catch (SQLException e) {</span>
-<span class="nc" id="L210">            return -1;</span>
+<span class="nc" id="L215">            return -1;</span>
+<span class="nc" id="L216">        } catch (SQLException e) {</span>
+<span class="nc" id="L217">            return -1;</span>
         }
     }
 }

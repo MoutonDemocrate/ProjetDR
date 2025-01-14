@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="fr.n7.hagimule.AppTest" time="0.108" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="fr.n7.hagimule.AppTest" time="0.134" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-23-openjdk/lib"/>
-    <property name="sun.java.command" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter352718053810615106.jar /home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire 2025-01-14T14-37-48_045-jvmRun1 surefire12446373035875146687tmp surefire_06084755866616096049tmp"/>
+    <property name="sun.java.command" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter11488570960657212582.jar /home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire 2025-01-14T15-07-22_075-jvmRun1 surefire5900346410240235608tmp surefire_016781644300524160910tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/test-classes:/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/classes:/home/lae/.m2/repository/org/openjfx/javafx-fxml/24-ea+19/javafx-fxml-24-ea+19.jar:/home/lae/.m2/repository/org/openjfx/javafx-fxml/24-ea+19/javafx-fxml-24-ea+19-linux.jar:/home/lae/.m2/repository/org/openjfx/javafx-controls/24-ea+19/javafx-controls-24-ea+19.jar:/home/lae/.m2/repository/org/openjfx/javafx-controls/24-ea+19/javafx-controls-24-ea+19-linux.jar:/home/lae/.m2/repository/org/openjfx/javafx-graphics/24-ea+19/javafx-graphics-24-ea+19.jar:/home/lae/.m2/repository/org/openjfx/javafx-graphics/24-ea+19/javafx-graphics-24-ea+19-linux.jar:/home/lae/.m2/repository/org/openjfx/javafx-base/24-ea+19/javafx-base-24-ea+19.jar:/home/lae/.m2/repository/org/openjfx/javafx-base/24-ea+19/javafx-base-24-ea+19-linux.jar:/home/lae/.m2/repository/org/xerial/sqlite-jdbc/3.47.2.0/sqlite-jdbc-3.47.2.0.jar:/home/lae/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0.jar:/home/lae/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/home/lae/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/lae/.m2/repository/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0.jar:/home/lae/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0.jar:/home/lae/.m2/repository/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter352718053810615106.jar"/>
+    <property name="surefire.real.class.path" value="/home/lae/Documents/Work/N7/2A/ProjetDR/hagimule/target/surefire/surefirebooter11488570960657212582.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23.0.1"/>
     <property name="user.name" value="lae"/>
@@ -53,5 +53,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testApp" classname="fr.n7.hagimule.AppTest" time="0.078"/>
+  <testcase name="testApp" classname="fr.n7.hagimule.AppTest" time="0.088"/>
 </testsuite>

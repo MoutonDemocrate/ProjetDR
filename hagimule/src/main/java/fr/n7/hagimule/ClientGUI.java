@@ -9,6 +9,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +35,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
@@ -158,6 +160,16 @@ public final class ClientGUI extends Application implements InterfaceClient {
         }
     }
     
+    public void addFileToShare() {
+        TextInputDialog tid = new TextInputDialog("");
+        tid.setTitle("HagiMule - Add File");
+        tid.setHeaderText("Input file name");
+        tid.setContentText("The file must be in the same folder !");
+        Optional<String> result = tid.showAndWait();
+        result.ifPresent(name -> partager(name));
+
+    }
+
     // // // //  TCP  // // // //
 
     public void telecharger(String nom){

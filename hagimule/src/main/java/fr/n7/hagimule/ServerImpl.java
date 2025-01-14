@@ -139,8 +139,11 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
     }
 
     private void insertNew(String name, int size, String client_adress) throws SQLException {
-        Statement st = sqlConnection.createStatement();
-        st.executeQuery("insert into files values (" + name + "," + String.valueOf(size) + "," + client_adress + ")");
+        PreparedStatement st = sqlConnection.prepareStatement("INSERT INTO files(name, size, hosters) VALUES (?, ?, ?)");
+        st.setString(1, name);
+        st.setInt(2, size);
+        st.setString(3, client_adress);
+        st.executeUpdate();
     }
 
     @Override
@@ -153,7 +156,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
     public String addFileToDirectory(String filename, int size, String client_adress) throws RemoteException {
         System.out.println("addFileToDirectory() called {"+filename+", "+String.valueOf(size)+", "+client_adress+"}");
         try {
-            String q = String.format("SELECT DISTINCT files FROM files WHERE name='%s';",filename);
+            String q = String.format("SELECT DISTINCT name FROM files WHERE name='%s';",filename);
             ResultSet rs = query(q);
             // If file is in database
             while (rs.next()) {
@@ -165,16 +168,20 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
                     st.setString(1, hosters);
                     st.setString(2, filename);
                     st.executeUpdate();
+                    System.out.println("Client succesfully added as hoster.");
                     return "Client succesfully added as hoster.";
                 } else {
                     // Client is already a hoster.
+                    System.out.println("Client is already a hoster.");
                     return "Client is already a hoster.";
                 }
             }
             // If file is not in the database
             insertNew(filename, size, client_adress);
+            System.out.println("File added in database, with client as hoster.");
             return "File added in database, with client as hoster.";
         } catch (SQLException e) {
+            e.printStackTrace();
             return "There was an error with the database.";
         }
     }

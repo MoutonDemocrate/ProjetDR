@@ -52,7 +52,7 @@
       </SplitPane>
       <HBox maxWidth="1.7976931348623157E308" minHeight="100.0" spacing="30.0" VBox.vgrow="SOMETIMES">
          <children>
-            <Button fx:id="addFileBtn" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add File to Host" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+            <Button fx:id="addFileBtn" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addFileToShare" text="Add File to Host" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                </HBox.margin>
