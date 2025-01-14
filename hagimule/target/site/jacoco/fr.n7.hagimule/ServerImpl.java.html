@@ -1,164 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ServerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hagimule</a> &gt; <a href="index.source.html" class="el_package">fr.n7.hagimule</a> &gt; <span class="el_source">ServerImpl.java</span></div><h1>ServerImpl.java</h1><pre class="source lang-java linenums">package fr.n7.hagimule;
 
-import org.json.*;
 import java.rmi.server.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.rmi.*;
 import java.sql.*;
 import java.util.Arrays;
-
-import javax.naming.spi.DirStateFactory.Result;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 
-    private JSONObject directory;
-    private Connection sqlConnection;
-
-<span class="nc" id="L19">    public ServerImpl() throws RemoteException {</span>
-<span class="nc" id="L20">        System.out.println(&quot;Searching for directory file...&quot;);</span>
-        // Path filePath = Path.of(&quot;directory.json&quot;);
-<span class="nc" id="L22">        String content = &quot;&quot;;</span>
+<span class="nc" id="L12">    public ServerImpl() throws RemoteException {</span>
+<span class="nc" id="L13">        System.out.println(&quot;Searching for directory file...&quot;);</span>
 
         // Chargement du driver SQL
         // Class.forName(&quot;org.sqlite.JDBC&quot;);
 
-<span class="nc" id="L27">        String url = &quot;jdbc:sqlite:files.db&quot;;</span>
+<span class="nc" id="L18">        String url = &quot;jdbc:sqlite:files.db&quot;;</span>
 
         try {
-<span class="nc" id="L30">            sqlConnection = DriverManager.getConnection(url);</span>
-<span class="nc" id="L31">            System.out.println(&quot;Connection to SQLite has been established.&quot;);</span>
-<span class="nc" id="L32">        } catch (SQLException e) {</span>
-<span class="nc" id="L33">            System.out.println(e.getMessage());</span>
-<span class="nc" id="L34">            System.exit(1);</span>
+<span class="nc" id="L21">            sqlConnection = DriverManager.getConnection(url);</span>
+<span class="nc" id="L22">            System.out.println(&quot;Connection to SQLite has been established.&quot;);</span>
+<span class="nc" id="L23">        } catch (SQLException e) {</span>
+<span class="nc" id="L24">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L25">            System.exit(1);</span>
         }
 
         
 
         try {
-<span class="nc" id="L40">            String q = &quot;SELECT * FROM files;&quot;;</span>
-<span class="nc" id="L41">            ResultSet rs = query(q);</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L43">                System.out.println((String.valueOf(rs.getRow()))</span>
-<span class="nc" id="L44">                + &quot; &quot; + rs.getString(&quot;name&quot;) </span>
-<span class="nc" id="L45">                + &quot; &quot; + String.valueOf(rs.getInt(&quot;size&quot;)) </span>
-<span class="nc" id="L46">                + &quot; &quot; + rs.getString(&quot;hosters&quot;));</span>
+<span class="nc" id="L31">            String q = &quot;SELECT * FROM files;&quot;;</span>
+<span class="nc" id="L32">            ResultSet rs = query(q);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L34">                System.out.println((String.valueOf(rs.getRow()))</span>
+<span class="nc" id="L35">                + &quot; &quot; + rs.getString(&quot;name&quot;) </span>
+<span class="nc" id="L36">                + &quot; &quot; + String.valueOf(rs.getInt(&quot;size&quot;)) </span>
+<span class="nc" id="L37">                + &quot; &quot; + rs.getString(&quot;hosters&quot;));</span>
             }
-<span class="nc" id="L48">        } catch (SQLException e) {</span>
-<span class="nc" id="L49">            System.err.println(&quot;--- SQL ERROR ---&quot;);</span>
-<span class="nc" id="L50">            e.printStackTrace();</span>
-<span class="nc" id="L51">            System.err.println(&quot;---           ---&quot;);</span>
+<span class="nc" id="L39">        } catch (SQLException e) {</span>
+<span class="nc" id="L40">            System.err.println(&quot;--- SQL ERROR ---&quot;);</span>
+<span class="nc" id="L41">            e.printStackTrace();</span>
+<span class="nc" id="L42">            System.err.println(&quot;---           ---&quot;);</span>
         }
 
-        // try {
-        //     ResultSet rs = query(&quot;SELECT * FROM files;&quot;);
-        //     while (rs.next()) {
-        //         System.out.println(rs.getString(&quot;name&quot;));
-        //     }
-        // } catch (SQLException e) {
-        //     System.err.println(&quot;--- SQL ERROR ---&quot;);
-        //     e.printStackTrace();
-        //     System.err.println(&quot;---           ---&quot;);
-        // }
+<span class="nc" id="L45">        System.out.println(&quot;Server instance created...&quot;);</span>
+<span class="nc" id="L46">    }</span>
 
-        // try {
-        //     content = Files.readString(filePath);
-        // } catch (IOException e) {
-        //     System.out.println(&quot;Directory not found in local folder !&quot;);
-        //     try {
-        //         Files.createFile(filePath);
-        //         Files.writeString(filePath,&quot;{}&quot;);
-        //         System.out.println(&quot;Creating directory...&quot;);
-        //     } catch (IOException e2) {
-        //         System.out.println(&quot;Can't create directory at path which allows directory creation. RUN.&quot;);
-        //     }
-        // }
+    // // // // Clients &amp; States // // // //
 
-        // System.out.println(&quot;Directory found.&quot;);
+    private class ClientState {
+        String Adress;
+        Boolean Dead;
+        Long LastTimeSeen;
+<span class="nc" id="L54">        public ClientState(String adress,</span>
+<span class="nc" id="L55">            Boolean dead) {</span>
+<span class="nc" id="L56">                this.Adress = adress;</span>
+<span class="nc" id="L57">                this.Dead = dead;</span>
+<span class="nc" id="L58">                this.LastTimeSeen = System.currentTimeMillis();</span>
+<span class="nc" id="L59">        }</span>
+    }
 
-        // try {
-        //     directory = new JSONObject(content);
-        // } catch (JSONException e) {
-        //     System.out.println(&quot;Invalid JSON !&quot;);
-        //     e.printStackTrace();
-        // }
+<span class="nc" id="L62">    private ClientState[] clients = {};</span>
 
-<span class="nc" id="L87">        System.out.println(&quot;Server instance created...&quot;);</span>
-<span class="nc" id="L88">    }</span>
+    // Returns -1 if client not in clients array
+    private Integer getClientIndex(String client_adress) {
+<span class="nc" id="L66">        Integer i = 0;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        while (i &lt; clients.length) {</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (clients[i].Adress == client_adress) {</span>
+<span class="nc" id="L69">                return i;</span>
+            }
+<span class="nc" id="L71">            i += 1;</span>
+        }
+<span class="nc" id="L73">        return -1;</span>
+    }
+
+    @Override
+    public Boolean refreshPresence(String client_adress) throws RemoteException {
+        // If client is in list
+<span class="nc" id="L79">        Integer index = getClientIndex(client_adress) ;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (index != -1) {</span>
+<span class="nc" id="L81">            clients[index].LastTimeSeen = System.currentTimeMillis();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (clients[index].Dead) {</span>
+<span class="nc" id="L83">                clients[index].Dead = false;</span>
+<span class="nc" id="L84">                return false;</span>
+            }
+<span class="nc" id="L86">            return true;</span>
+        } else {
+<span class="nc" id="L88">            clients[clients.length] = new ClientState(client_adress, false);</span>
+<span class="nc" id="L89">            return true;</span>
+        }
+    }
+
+    // On crée un timer qui va exécuter un tâche toutes les 10 secondes
+<span class="nc" id="L94">    public class Taskn extends TimerTask {</span>
+        public void main(String args[]){
+<span class="nc" id="L96">            TimerTask timerTask = new Taskn(); //reference created for TimerTask class</span>
+             
+<span class="nc" id="L98">            Timer timer = new Timer(true);</span>
+<span class="nc" id="L99">            timer.scheduleAtFixedRate(timerTask, 0, 20000); // 1.task 2.delay 3.period</span>
+<span class="nc" id="L100">        }</span>
+        public void run(){
+<span class="nc" id="L102">            System.out.println(&quot;Checking for dead clients...&quot;);</span>
+<span class="nc" id="L103">            Long time = System.currentTimeMillis();</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            for (ClientState clientState : clients) {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                if ((time - clientState.LastTimeSeen) &gt;= 20000) {</span>
+<span class="nc" id="L106">                    clientState.Dead = true;</span>
+                }
+            }
+<span class="nc" id="L109">        }</span>
+    }
+
+    // // // // SQL and Requests // // // //
+
+    private Connection sqlConnection;
 
     private ResultSet query(String sql) throws SQLException {
-<span class="nc" id="L91">        Statement st = sqlConnection.createStatement();</span>
-<span class="nc" id="L92">        ResultSet rs = st.executeQuery(sql);</span>
-<span class="nc" id="L93">        return rs;</span>
+<span class="nc" id="L117">        Statement st = sqlConnection.createStatement();</span>
+<span class="nc" id="L118">        ResultSet rs = st.executeQuery(sql);</span>
+<span class="nc" id="L119">        return rs;</span>
     }
 
     private void insertNew(String name, int size, String client_adress) throws SQLException {
-<span class="nc" id="L97">        Statement st = sqlConnection.createStatement();</span>
-<span class="nc" id="L98">        st.executeQuery(&quot;insert into files values (&quot; + name + &quot;,&quot; + String.valueOf(size) + &quot;,&quot; + client_adress + &quot;)&quot;);</span>
-<span class="nc" id="L99">    }</span>
+<span class="nc" id="L123">        Statement st = sqlConnection.createStatement();</span>
+<span class="nc" id="L124">        st.executeQuery(&quot;insert into files values (&quot; + name + &quot;,&quot; + String.valueOf(size) + &quot;,&quot; + client_adress + &quot;)&quot;);</span>
+<span class="nc" id="L125">    }</span>
 
     @Override
     public String ping() throws RemoteException {
-<span class="nc" id="L103">        System.out.println(&quot;Ping called !&quot;);</span>
-<span class="nc" id="L104">        return &quot;Server online.&quot;;</span>
+<span class="nc" id="L129">        System.out.println(&quot;Ping called !&quot;);</span>
+<span class="nc" id="L130">        return &quot;Server online.&quot;;</span>
     }
 
     @Override
     public String addFileToDirectory(String filename, int size, String client_adress) throws RemoteException {
-        // JSONArray client_array;
-        // if (directory.has(filename)) {
-        //     client_array = (JSONArray) directory.get(filename);
-        //     client_array.put(client_adress);
-        //     directory.put(filename, client_array);
-        //     return &quot;Added client for &quot; + filename + &quot;...&quot;;
-        // } else {
-        //     client_array = new JSONArray();
-        //     client_array.put(client_adress);
-        //     directory.put(filename, client_array);
-        //     return &quot;Created new entry for &quot; + filename + &quot;...&quot;;
-        // }
         try {
-<span class="nc" id="L122">            String q = String.format(&quot;SELECT DISTINCT files FROM files WHERE name='%s';&quot;,filename);</span>
-<span class="nc" id="L123">            ResultSet rs = query(q);</span>
+<span class="nc" id="L136">            String q = String.format(&quot;SELECT DISTINCT files FROM files WHERE name='%s';&quot;,filename);</span>
+<span class="nc" id="L137">            ResultSet rs = query(q);</span>
             // If file is in database
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L126">                String hosters = rs.getString(&quot;hosters&quot;);</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L140">                String hosters = rs.getString(&quot;hosters&quot;);</span>
                 // If client is not already a hoster
-<span class="nc bnc" id="L128" title="All 2 branches missed.">                if (!Arrays.stream(hosters.split(&quot;;&quot;)).anyMatch(&quot;client_adress&quot;::equals)) {</span>
-<span class="nc" id="L129">                    hosters += &quot;;&quot; + client_adress ;</span>
-<span class="nc" id="L130">                    PreparedStatement st = sqlConnection.prepareStatement(&quot;UPDATE item SET hosters = ?, WHERE name = ?&quot;);</span>
-<span class="nc" id="L131">                    st.setString(1, hosters);</span>
-<span class="nc" id="L132">                    st.setString(2, filename);</span>
-<span class="nc" id="L133">                    st.executeUpdate();</span>
-<span class="nc" id="L134">                    return &quot;Client succesfully added as hoster.&quot;;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                if (!Arrays.stream(hosters.split(&quot;;&quot;)).anyMatch(&quot;client_adress&quot;::equals)) {</span>
+<span class="nc" id="L143">                    hosters += &quot;;&quot; + client_adress ;</span>
+<span class="nc" id="L144">                    PreparedStatement st = sqlConnection.prepareStatement(&quot;UPDATE item SET hosters = ?, WHERE name = ?&quot;);</span>
+<span class="nc" id="L145">                    st.setString(1, hosters);</span>
+<span class="nc" id="L146">                    st.setString(2, filename);</span>
+<span class="nc" id="L147">                    st.executeUpdate();</span>
+<span class="nc" id="L148">                    return &quot;Client succesfully added as hoster.&quot;;</span>
                 } else {
                     // Client is already a hoster.
-<span class="nc" id="L137">                    return &quot;Client is already a hoster.&quot;;</span>
+<span class="nc" id="L151">                    return &quot;Client is already a hoster.&quot;;</span>
                 }
             }
             // If file is not in the database
-<span class="nc" id="L141">            insertNew(filename, size, client_adress);</span>
-<span class="nc" id="L142">            return &quot;File added in database, with client as hoster.&quot;;</span>
-<span class="nc" id="L143">        } catch (SQLException e) {</span>
-<span class="nc" id="L144">            return &quot;There was an error with the database.&quot;;</span>
+<span class="nc" id="L155">            insertNew(filename, size, client_adress);</span>
+<span class="nc" id="L156">            return &quot;File added in database, with client as hoster.&quot;;</span>
+<span class="nc" id="L157">        } catch (SQLException e) {</span>
+<span class="nc" id="L158">            return &quot;There was an error with the database.&quot;;</span>
         }
     }
 
     @Override
     public String[] getClientsForFile(String filename) throws RemoteException {
-<span class="nc" id="L150">        System.out.println(&quot;Client requested : &quot; + filename);</span>
-<span class="nc" id="L151">        String hosters = &quot;&quot;;</span>
+<span class="nc" id="L164">        System.out.println(&quot;Client requested : &quot; + filename);</span>
+<span class="nc" id="L165">        String hosters = &quot;&quot;;</span>
         try {
-<span class="nc" id="L153">            String q = String.format(&quot;SELECT DISTINCT hosters FROM files WHERE name='%s';&quot;,filename);</span>
-<span class="nc" id="L154">            ResultSet rs = query(q);</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            while (rs.next()) {</span>
-<span class="nc" id="L156">                hosters = rs.getString(&quot;hosters&quot;);</span>
-<span class="nc" id="L157">                return hosters.split(&quot;;&quot;);</span>
+<span class="nc" id="L167">            String q = String.format(&quot;SELECT DISTINCT hosters FROM files WHERE name='%s';&quot;,filename);</span>
+<span class="nc" id="L168">            ResultSet rs = query(q);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L170">                hosters = rs.getString(&quot;hosters&quot;);</span>
+<span class="nc" id="L171">                return hosters.split(&quot;;&quot;);</span>
             }
-<span class="nc" id="L159">            return new String[]{};</span>
-<span class="nc" id="L160">        } catch (SQLException e) {</span>
-<span class="nc" id="L161">            return new String[]{};</span>
+<span class="nc" id="L173">            return new String[]{};</span>
+<span class="nc" id="L174">        } catch (SQLException e) {</span>
+<span class="nc" id="L175">            return new String[]{};</span>
         }
     }
 }

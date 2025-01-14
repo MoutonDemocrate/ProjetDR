@@ -1,25 +1,16 @@
 package fr.n7.hagimule;
 
-import org.json.*;
 import java.rmi.server.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.rmi.*;
 import java.sql.*;
 import java.util.Arrays;
-
-import javax.naming.spi.DirStateFactory.Result;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 
-    private JSONObject directory;
-    private Connection sqlConnection;
-
     public ServerImpl() throws RemoteException {
         System.out.println("Searching for directory file...");
-        // Path filePath = Path.of("directory.json");
-        String content = "";
 
         // Chargement du driver SQL
         // Class.forName("org.sqlite.JDBC");
@@ -51,41 +42,76 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
             System.err.println("---           ---");
         }
 
-        // try {
-        //     ResultSet rs = query("SELECT * FROM files;");
-        //     while (rs.next()) {
-        //         System.out.println(rs.getString("name"));
-        //     }
-        // } catch (SQLException e) {
-        //     System.err.println("--- SQL ERROR ---");
-        //     e.printStackTrace();
-        //     System.err.println("---           ---");
-        // }
-
-        // try {
-        //     content = Files.readString(filePath);
-        // } catch (IOException e) {
-        //     System.out.println("Directory not found in local folder !");
-        //     try {
-        //         Files.createFile(filePath);
-        //         Files.writeString(filePath,"{}");
-        //         System.out.println("Creating directory...");
-        //     } catch (IOException e2) {
-        //         System.out.println("Can't create directory at path which allows directory creation. RUN.");
-        //     }
-        // }
-
-        // System.out.println("Directory found.");
-
-        // try {
-        //     directory = new JSONObject(content);
-        // } catch (JSONException e) {
-        //     System.out.println("Invalid JSON !");
-        //     e.printStackTrace();
-        // }
-
         System.out.println("Server instance created...");
     }
+
+    // // // // Clients & States // // // //
+
+    private class ClientState {
+        String Adress;
+        Boolean Dead;
+        Long LastTimeSeen;
+        public ClientState(String adress,
+            Boolean dead) {
+                this.Adress = adress;
+                this.Dead = dead;
+                this.LastTimeSeen = System.currentTimeMillis();
+        }
+    }
+
+    private ClientState[] clients = {};
+
+    // Returns -1 if client not in clients array
+    private Integer getClientIndex(String client_adress) {
+        Integer i = 0;
+        while (i < clients.length) {
+            if (clients[i].Adress == client_adress) {
+                return i;
+            }
+            i += 1;
+        }
+        return -1;
+    }
+
+    @Override
+    public Boolean refreshPresence(String client_adress) throws RemoteException {
+        // If client is in list
+        Integer index = getClientIndex(client_adress) ;
+        if (index != -1) {
+            clients[index].LastTimeSeen = System.currentTimeMillis();
+            if (clients[index].Dead) {
+                clients[index].Dead = false;
+                return false;
+            }
+            return true;
+        } else {
+            clients[clients.length] = new ClientState(client_adress, false);
+            return true;
+        }
+    }
+
+    // On crée un timer qui va exécuter un tâche toutes les 10 secondes
+    public class Taskn extends TimerTask {
+        public void main(String args[]){
+            TimerTask timerTask = new Taskn(); //reference created for TimerTask class
+             
+            Timer timer = new Timer(true);
+            timer.scheduleAtFixedRate(timerTask, 0, 20000); // 1.task 2.delay 3.period
+        }
+        public void run(){
+            System.out.println("Checking for dead clients...");
+            Long time = System.currentTimeMillis();
+            for (ClientState clientState : clients) {
+                if ((time - clientState.LastTimeSeen) >= 20000) {
+                    clientState.Dead = true;
+                }
+            }
+        }
+    }
+
+    // // // // SQL and Requests // // // //
+
+    private Connection sqlConnection;
 
     private ResultSet query(String sql) throws SQLException {
         Statement st = sqlConnection.createStatement();
@@ -106,18 +132,6 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 
     @Override
     public String addFileToDirectory(String filename, int size, String client_adress) throws RemoteException {
-        // JSONArray client_array;
-        // if (directory.has(filename)) {
-        //     client_array = (JSONArray) directory.get(filename);
-        //     client_array.put(client_adress);
-        //     directory.put(filename, client_array);
-        //     return "Added client for " + filename + "...";
-        // } else {
-        //     client_array = new JSONArray();
-        //     client_array.put(client_adress);
-        //     directory.put(filename, client_array);
-        //     return "Created new entry for " + filename + "...";
-        // }
         try {
             String q = String.format("SELECT DISTINCT files FROM files WHERE name='%s';",filename);
             ResultSet rs = query(q);

@@ -9,4 +9,6 @@ public interface MuleServer extends Remote {
 
     public String[] getClientsForFile(String filename) throws RemoteException;
     
+    // Returns false if client was considered "dead" before refresh
+    public Boolean refreshPresence(String client_adress) throws RemoteException;
 }

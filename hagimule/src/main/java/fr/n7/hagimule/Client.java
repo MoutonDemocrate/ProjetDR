@@ -1,32 +1,9 @@
 package fr.n7.hagimule;
 
-import java.rmi.Naming;
-import java.rmi.registry.LocateRegistry;
+public class Client {
 
-/**
- * Hello world!
- */
-public final class Client {
-    private Client() {
+    public static void main(final String[] args) {
+        ClientGUI.main(args);
     }
 
-    /**
-     * Says hello to the world.
-     * 
-     * @param args The arguments of the program.
-     */
-    public static void main(String[] args) {
-        System.out.println("Starting client...");
-        try {
-            // LocateRegistry.getRegistry("localhost",1999);
-            // System.out.println("Found registry...");
-            MuleServer s = (MuleServer) Naming.lookup("rmi://192.168.43.241:1999/HagimuleServer");
-            System.out.println("Found server...");
-            System.out.println("Pinging server...");
-            String response = s.ping() ;
-            System.out.println("[SERVER] "+response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
