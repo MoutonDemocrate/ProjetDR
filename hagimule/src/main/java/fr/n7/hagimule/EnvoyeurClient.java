@@ -18,14 +18,14 @@ public class EnvoyeurClient extends Thread{
     }
 
     //thanks to Wytze form stackOverflows: https://stackoverflow.com/questions/4485128/how-do-i-convert-long-to-byte-and-back-in-java
-    public static byte[] longToBytes(long l) {
-    byte[] result = new byte[Long.BYTES];
-    for (int i = Long.BYTES - 1; i >= 0; i--) {
-        result[i] = (byte)(l & 0xFF);
-        l >>= Byte.SIZE;
-    }
-    return result;
-    }
+    // public static byte[] longToBytes(long l) {
+    // byte[] result = new byte[Long.BYTES];
+    // for (int i = Long.BYTES - 1; i >= 0; i--) {
+    //     result[i] = (byte)(l & 0xFF);
+    //     l >>= Byte.SIZE;
+    // }
+    // return result;
+    // }
 
     public void run() {
         try {
@@ -45,14 +45,14 @@ public class EnvoyeurClient extends Thread{
             int debut =  frag*( (int) Math.ceil(length/nb));
             int taille = (int) Math.min(Math.ceil(length/nb),length-debut);
 
-            byte[] inputHeader = longToBytes(lengthLong);
-            os.write(inputHeader, 0, 8);
+            // byte[] inputHeader = longToBytes(lengthLong);
+            // os.write(inputHeader, 0, 8);
 
             byte[] inputCore = new byte[(int) taille];
 			fis.skip(debut);
 
 			fis.read(inputCore);
-            os.write(inputCore, 8, length);
+            os.write(inputCore);
             os.close();
             fis.close();
             is.close();

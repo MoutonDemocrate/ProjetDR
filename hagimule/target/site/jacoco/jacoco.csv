@@ -1,9 +1,12 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 hagimule,fr.n7.hagimule,MuleServer.FileInfo,21,0,0,0,8,0,4,0,4,0
-hagimule,fr.n7.hagimule,ClientGUI,222,0,0,0,49,0,6,0,6,0
-hagimule,fr.n7.hagimule,ServerImpl.ClientState,16,0,0,0,6,0,1,0,1,0
-hagimule,fr.n7.hagimule,Server,40,0,0,0,9,0,1,0,1,0
-hagimule,fr.n7.hagimule,ServerImpl,394,0,18,0,85,0,18,0,9,0
+hagimule,fr.n7.hagimule,ClientGUI,334,0,2,0,81,0,10,0,9,0
+hagimule,fr.n7.hagimule,ServerImpl.ClientState,16,0,0,0,5,0,1,0,1,0
+hagimule,fr.n7.hagimule,Server,42,0,0,0,10,0,1,0,1,0
+hagimule,fr.n7.hagimule,ServerImpl,435,0,20,0,96,0,20,0,10,0
 hagimule,fr.n7.hagimule,ClientGUI.LocalFileInfo,12,0,0,0,4,0,1,0,1,0
-hagimule,fr.n7.hagimule,ServerImpl.Taskn,61,0,4,0,11,0,5,0,3,0
-hagimule,fr.n7.hagimule,Client,6,0,0,0,3,0,2,0,2,0
+hagimule,fr.n7.hagimule,ReceveurClient,164,0,4,0,39,0,6,0,4,0
+hagimule,fr.n7.hagimule,EnvoyeurClient,128,0,0,0,36,0,3,0,3,0
+hagimule,fr.n7.hagimule,ClientGUI.new TimerTask() {...},10,0,0,0,1,0,2,0,2,0
+hagimule,fr.n7.hagimule,ServerImpl.new TimerTask() {...},44,0,4,0,7,0,4,0,2,0
+hagimule,fr.n7.hagimule,Client,3,0,0,0,2,0,1,0,1,0

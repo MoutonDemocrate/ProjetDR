@@ -1,5 +1,6 @@
 package fr.n7.hagimule;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -39,7 +40,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * Hello world!
  
  */
-public final class ClientGUI extends Application {
+public final class ClientGUI extends Application implements InterfaceClient {
     public ClientGUI() {
     }
 
@@ -78,6 +79,7 @@ public final class ClientGUI extends Application {
     // // // // Backend // // // // 
     
     public MuleServer server;
+    private String selfAdress;
     public ObservableList<MuleServer.FileInfo> filesList;
 
     private class LocalFileInfo {
@@ -94,8 +96,8 @@ public final class ClientGUI extends Application {
         System.out.println("Starting client...");
 
         try {
-            String host_adress = InetAddress.getLocalHost().getHostAddress();
-            LabelIP.setText(host_adress);
+            selfAdress = InetAddress.getLocalHost().getHostAddress();
+            LabelIP.setText(selfAdress);
         } catch (UnknownHostException e) {
             e.printStackTrace();
             System.err.println("Can't access localhost : you messed up something preeeeetty badly here.");
@@ -150,10 +152,41 @@ public final class ClientGUI extends Application {
         try {
             MuleServer.FileInfo file = serverTable.getSelectionModel().getSelectedItem();
             System.out.println("Trying to download file : "+file.Name);
-            // TODO : implémenter le backend de JP pour le téléchargement
+            telecharger(file.Name);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
+    // // // //  TCP  // // // //
+
+    public void telecharger(String nom){
+        String[] hosts = null;
+        int size = -1;
+        try {
+            hosts = server.getClientsForFile(nom);
+            size = server.getSizeForFile(nom);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            System.err.println("There was an error trying to interact with the server.");
+        }
+        if (hosts == null) {
+            System.out.println("Fichier introuvables, échec de la requête");
+        } else {
+            ReceveurClient receveur = new ReceveurClient(hosts.length, nom, size, hosts);
+            ReceveurClient.lancement();
+        }
+    }
+
+    public void partager(String nom){
+        try {
+            File file = new File("./"+nom);
+            Long size = file.length();
+            String log = server.addFileToDirectory(nom, size.intValue() ,selfAdress);
+            System.out.println(log);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -195,4 +195,19 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
             return new String[]{};
         }
     }
+
+    @Override
+    public int getSizeForFile(String filename) throws RemoteException {
+        System.out.println("Client requested size of : " + filename);
+        try {
+            String q = String.format("SELECT size FROM files WHERE name='%s';",filename);
+            ResultSet rs = query(q);
+            while (rs.next()) {
+                return rs.getInt("size");
+            }
+            return -1;
+        } catch (SQLException e) {
+            return -1;
+        }
+    }
 }

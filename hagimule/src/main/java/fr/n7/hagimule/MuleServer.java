@@ -25,6 +25,8 @@ public interface MuleServer extends Remote {
 
     public String[] getClientsForFile(String filename) throws RemoteException;
 
+    public int getSizeForFile(String filename) throws RemoteException;
+
     public ArrayList<FileInfo> getAllFiles() throws RemoteException;
     
     // Returns false if client was considered "dead" before refresh
