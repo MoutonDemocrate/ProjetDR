@@ -6,9 +6,6 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-/**
- * Hello world!
- */
 public final class Server {
     private Server() {
     }

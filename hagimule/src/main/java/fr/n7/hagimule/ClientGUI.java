@@ -1,11 +1,23 @@
 package fr.n7.hagimule;
 
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import fr.n7.hagimule.MuleServer.FileInfo;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -14,9 +26,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
+import javafx.util.Callback;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * Hello world!
@@ -30,6 +47,12 @@ public final class ClientGUI extends Application {
   
     @FXML public Label LabelIP;
     @FXML public Label LabelServerState;
+
+    @FXML public TextArea TextAreaPort;
+    @FXML public TextArea TextAreaServer;
+
+    @FXML public TableView<LocalFileInfo> localTable;
+    @FXML public TableView<MuleServer.FileInfo> serverTable;
 
     @FXML
     private void initialize() 
@@ -51,8 +74,22 @@ public final class ClientGUI extends Application {
         stage.show();
     }
 
+
     // // // // Backend // // // // 
     
+    public MuleServer server;
+    public ObservableList<MuleServer.FileInfo> filesList;
+
+    private class LocalFileInfo {
+        public String Name;
+        public Integer Size;
+        public LocalFileInfo(String name, Integer size) {
+            this.Name = name;
+            this.Size = size;
+        }    
+    }
+
+    @FXML
     public void startClient(){
         System.out.println("Starting client...");
 
@@ -64,18 +101,59 @@ public final class ClientGUI extends Application {
             System.err.println("Can't access localhost : you messed up something preeeeetty badly here.");
         }
 
+        System.out.println("System adress found, looking for server...");
+
         try {
-            // LocateRegistry.getRegistry("localhost",1999);
-            // System.out.println("Found registry...");
-            MuleServer s = (MuleServer) Naming.lookup("rmi://192.168.43.241:1999/HagimuleServer");
+            server = (MuleServer) Naming.lookup("rmi://"+TextAreaServer.getText()+":"+TextAreaPort.getText()+"/HagimuleServer");
             System.out.println("Found server...");
-            LabelIP.setText("Found server...");
+            LabelServerState.setText("Found server...");
             System.out.println("Pinging server...");
-            String response = s.ping() ;
+            String response = server.ping() ;
             System.out.println("[SERVER] "+response);
+            Timer t = new Timer();
+            t.scheduleAtFixedRate(
+                new TimerTask() {public void run() {fetchServerFiles();}},
+                0,      // run first occurrence immediately
+                20000);  // run every 20 seconds
+        } catch (MalformedURLException e) {
+            LabelServerState.setText("Server not found at "+TextAreaServer.getText()+":"+TextAreaPort.getText()+" !");
+            e.printStackTrace();
+            System.err.println("RMI Error : Server not found, malformed adress.");
+        } catch (NotBoundException e) {
+            LabelServerState.setText("Server not bound at "+TextAreaServer.getText()+":"+TextAreaPort.getText()+" !");
+            e.printStackTrace();
+            System.err.println("Not Bound : Server was found but isn't active.");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            System.err.println("Remote Exception : Server is either offline or call was incorrect.");
+        }
+    }
+
+    public void fetchServerFiles(){
+        try {
+            ArrayList<MuleServer.FileInfo> files = server.getAllFiles();
+            System.out.println("Receiving files : " + files.toString());
+            filesList = FXCollections.observableArrayList(files);
+            serverTable.setItems(null);
+            ObservableList<TableColumn<MuleServer.FileInfo, ?>> cols = serverTable.getColumns();
+            cols.get(0).setCellValueFactory(new PropertyValueFactory<>("Name"));
+            cols.get(1).setCellValueFactory(new PropertyValueFactory<>("Size"));
+            cols.get(2).setCellValueFactory(new PropertyValueFactory<>("Hosters"));
+            serverTable.setItems(filesList);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            System.err.println("Server error : can't call getAllFiles() method.");
+        }
+    }
+
+    public void startDownload(){
+        try {
+            MuleServer.FileInfo file = serverTable.getSelectionModel().getSelectedItem();
+            System.out.println("Trying to download file : "+file.Name);
+            // TODO : implémenter le backend de JP pour le téléchargement
         } catch (Exception e) {
-            LabelIP.setText("Server not found at 192.168.43.241:1999");
             e.printStackTrace();
         }
     }
+    
 }

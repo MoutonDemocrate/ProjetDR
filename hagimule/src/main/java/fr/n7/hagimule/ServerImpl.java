@@ -3,6 +3,7 @@ package fr.n7.hagimule;
 import java.rmi.server.*;
 import java.rmi.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,6 +44,25 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
         }
 
         System.out.println("Server instance created...");
+
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(
+            new TimerTask()
+            {
+                public void run()
+                {
+                    System.out.println("Checking for dead clients...");
+                    Long time = System.currentTimeMillis();
+                    for (ClientState clientState : clients) {
+                        if ((time - clientState.LastTimeSeen) >= 20000) {
+                            clientState.Dead = true;
+                        }
+                    }
+                }
+            },
+            0,      // run first occurrence immediately
+            20000);  // run every twenty seconds
+
     }
 
     // // // // Clients & States // // // //
@@ -90,28 +110,27 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
         }
     }
 
-    // On crée un timer qui va exécuter un tâche toutes les 10 secondes
-    public class Taskn extends TimerTask {
-        public void main(String args[]){
-            TimerTask timerTask = new Taskn(); //reference created for TimerTask class
-             
-            Timer timer = new Timer(true);
-            timer.scheduleAtFixedRate(timerTask, 0, 20000); // 1.task 2.delay 3.period
-        }
-        public void run(){
-            System.out.println("Checking for dead clients...");
-            Long time = System.currentTimeMillis();
-            for (ClientState clientState : clients) {
-                if ((time - clientState.LastTimeSeen) >= 20000) {
-                    clientState.Dead = true;
-                }
-            }
-        }
-    }
-
     // // // // SQL and Requests // // // //
 
     private Connection sqlConnection;
+
+    @Override
+    public ArrayList<FileInfo> getAllFiles() throws RemoteException {
+        System.out.println("getAllFiles() called.");
+        ArrayList<FileInfo> files = new ArrayList<FileInfo>();
+        try {
+            ResultSet rs = query("SELECT * FROM files;");
+            while (rs.next()) {
+                FileInfo fileInfo = new FileInfo(rs.getString("name"), rs.getInt("size"), rs.getString("hosters"));
+                files.add(fileInfo);
+            }
+            System.out.println("Returning : " + files.toString());
+            return files;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return files;
+    }
 
     private ResultSet query(String sql) throws SQLException {
         Statement st = sqlConnection.createStatement();
@@ -132,6 +151,7 @@ public class ServerImpl extends UnicastRemoteObject implements MuleServer {
 
     @Override
     public String addFileToDirectory(String filename, int size, String client_adress) throws RemoteException {
+        System.out.println("addFileToDirectory() called {"+filename+", "+String.valueOf(size)+", "+client_adress+"}");
         try {
             String q = String.format("SELECT DISTINCT files FROM files WHERE name='%s';",filename);
             ResultSet rs = query(q);
